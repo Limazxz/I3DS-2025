@@ -7,8 +7,8 @@
 }
 
 :root {
-  --bg-url: url(./img/c9a7f93db3274e6cc9c743a6164fab2f.jpg);
-  --text-color: #000000;
+  --bg-url: url(./img/wp13904571-pagani-zonda-4k-wallpapers.jpg);
+  --text-color: #ffffff;
   --stroke-color: rgba(255, 255, 255, 0.5);
   --surface-color: rgba(255, 255, 255, 0.1);
   --surface-color-hover: rgba(255, 255, 255, 0.5);
@@ -17,7 +17,7 @@
 }
 
 .light {
-  --bg-url: url(./img/7996f4c2376dec317e91c557232f1286.jpg);
+  --bg-url: url(./img/uwp3600696.png);
   --text-color: #ffffff;
   --stroke-color: rgb(0, 0, 0);
   --surface-color: rgba(0, 0, 0, 0.1);
@@ -70,9 +70,9 @@
 
 @media {
   :root {
-    --bg-url: url(./img/c9a7f93db3274e6cc9c743a6164fab2f.jpg);
+    --bg-url: url(./img/wp13904571-pagani-zonda-4k-wallpapers.jpg);
   }
   .light {
-    --bg-url: url(./img/7996f4c2376dec317e91c557232f1286.jpg);
+    --bg-url: url(./img/uwp3600696.png);
   }
 }

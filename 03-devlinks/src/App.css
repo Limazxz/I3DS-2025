@@ -18,8 +18,8 @@
 
 .light {
   --bg-url: url(./img/7996f4c2376dec317e91c557232f1286.jpg);
-  --text-color: #ffffff9c;
-  --stroke-color: rgba(0, 0, 0, 0.5);
+  --text-color: #ffffff;
+  --stroke-color: rgb(0, 0, 0);
   --surface-color: rgba(0, 0, 0, 0.1);
   --surface-color-hover: rgba(197, 197, 197, 0.5);
   --switch-bg-url: url(./img/Sun.svg);

@@ -1,9 +1,9 @@
 footer {
   text-align: center;
   font-size: 14px;
-  padding: 24px;
+  padding-top: 24px;
 
   & a {
-    text-decoration: center;
+    text-decoration: none;
   }
 }

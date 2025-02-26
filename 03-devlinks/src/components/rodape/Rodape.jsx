@@ -1,4 +1,4 @@
-import styles from './Rodape.module.css'
+import styles from "./Rodape.module.css";
 
 const Rodape = ({children}) => {
   return (
@@ -7,7 +7,7 @@ const Rodape = ({children}) => {
         Feito com 🤍 por <a href="https://github.com">{children}</a>
       </p>
     </footer>
-  )
-}
+  );
+};
 
-export default Rodape
+export default Rodape;

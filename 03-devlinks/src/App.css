@@ -7,8 +7,8 @@
 }
 
 :root {
-  --bg-url: url(./img/bg-desktop.jpg);
-  --text-color: #fff;
+  --bg-url: url(./img/c9a7f93db3274e6cc9c743a6164fab2f.jpg);
+  --text-color: #000000;
   --stroke-color: rgba(255, 255, 255, 0.5);
   --surface-color: rgba(255, 255, 255, 0.1);
   --surface-color-hover: rgba(255, 255, 255, 0.5);
@@ -17,11 +17,11 @@
 }
 
 .light {
-  --bg-url: url(./img/bg-desktop-light.jpg);
-  --text-color: #000;
+  --bg-url: url(./img/7996f4c2376dec317e91c557232f1286.jpg);
+  --text-color: #ffffff9c;
   --stroke-color: rgba(0, 0, 0, 0.5);
   --surface-color: rgba(0, 0, 0, 0.1);
-  --surface-color-hover: rgba(0, 0, 0, 0.5);
+  --surface-color-hover: rgba(197, 197, 197, 0.5);
   --switch-bg-url: url(./img/Sun.svg);
   --highlight-color: rgba(0, 0, 0, 0.2);
 }
@@ -40,9 +40,13 @@
 #container {
   width: 100%;
   max-width: 588px;
-  margin: 0px auto 0px;
+  margin: 0 auto;
   padding: 0 24px;
   padding-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #links ul {
@@ -51,6 +55,8 @@
   flex-direction: column;
   gap: 16px;
   padding: 24px;
+  justify-content: center;
+  align-items: center; /* Centraliza os botões horizontalmente */
 }
 
 #socialLinks {
@@ -62,11 +68,11 @@
   font-size: 24px;
 }
 
-@media (max-width: 700px) {
+@media {
   :root {
-    --bg-url: url(./img/bg-mobile.jpg);
+    --bg-url: url(./img/c9a7f93db3274e6cc9c743a6164fab2f.jpg);
   }
   .light {
-    --bg-url: url(./img/bg-mobile-light.jpg);
+    --bg-url: url(./img/7996f4c2376dec317e91c557232f1286.jpg);
   }
 }

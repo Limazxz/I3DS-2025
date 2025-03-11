@@ -1,119 +1,62 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 import MovieCard from "./components/movieCard/MovieCard";
 import Footer from "./components/footer/Footer";
 // import logo from
 
 const App = () => {
-  const movies = [
-    {
-      Year: "2014",
-      Type: "Sci-Fi",
-      Title: "Interstellar",
-      director: "Christopher Nolan",
-      rating: 8.6,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Inception",
-      boxOffice: "$836.8M",
-      rating: 8.8,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "The Expendables",
-      boxOffice: "Não disponível na API",
-      rating: 6.5,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Iron Man 2",
-      boxOffice: "Não disponível na API",
-      rating: 7.0,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Robin Hood",
-      boxOffice: "Não disponível na API",
-      rating: 6.7,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Shutter Island",
-      boxOffice: "Não disponível na API",
-      rating: 8.2,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Kick-Ass",
-      boxOffice: "Não disponível na API",
-      rating: 7.6,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Predators",
-      boxOffice: "Não disponível na API",
-      rating: 6.4,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "The A-Team",
-      boxOffice: "Não disponível na API",
-      rating: 6.6,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Clash of the Titans",
-      boxOffice: "Não disponível na API",
-      rating: 5.8,
-      Poster: "https://placehold.co/850x480",
-    },
-    {
-      Year: "2010",
-      Type: "Action",
-      Title: "Salt",
-      boxOffice: "Não disponível na API",
-      rating: 6.5,
-      Poster: "https://placehold.co/850x480",
-    },
-  ];
+  const [search, setSearch] = useState("");
+  const [movies, setMovies] = useState([]);
+
+  //utilizando chae de API do arquivo .env
+  const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+  const apiUrl = `https://omdbapi.com/?apikey=${apiKey}`;
+
+  // alimentando com dados para não ficar nulo
+  useEffect(() => {
+    searchMovies("Batman");
+  }, []);
+
+  //criando a conexão com a API e trazendo informações
+  const searchMovies = async (title) => {
+    const response = await fetch(`${apiUrl}&s=${title}`);
+    const data = await response.json();
+
+    //alimentando o movies
+    setMovies(data.Search);
+  };
+
+  const handleKeyPress = (e) => {
+    e.key === "Enter" && searchMovies(search);
+  };
 
   return (
     <div id="app">
       <img className="logo" src="https://placehold.co/200x200" alt="" />
 
       <div className="search">
-        <input type="text" placeholder="Pesquise por fimes" />
-        <img src="https://placehold.co/20x20" alt="" />
+        <input
+          onKeyDown={handleKeyPress}
+          onChange={(e) => setSearch(e.target.value)}
+          type="text"
+          placeholder="Pesquise por filmes"
+        />
+        <img
+          onClick={() => searchMovies(search)}
+          src="https://placehold.co/20x20"
+          alt=""
+        />
       </div>
 
-      {movies.map((movie, index) => (
-        <MovieCard
-          {...movie}
-          key={index}
-          // Year={movie.Year}
-          // Type={movie.Type}
-          // Title={movie.Title}
-          // Poster={movie.Poster}
-        />
-      ))}
+      {movies?.length > 0 ? (
+        <div className="container">
+          {movies.map((movie, index) => (
+            <MovieCard {...movie} key={index} />
+          ))}
+        </div>
+      ) : (
+        <h2 className="empty">Nenhum filme encontrado😢</h2>
+      )}
 
       <Footer devName={" Limazxzn"} devLink={"https://github.com/limazxz"} />
     </div>

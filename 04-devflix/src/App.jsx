@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import MovieCard from "./components/movieCard/MovieCard";
 import Footer from "./components/footer/Footer";
-import logo from "./assets/devflix.png";
+import MovieCard from "./components/movieCard/MovieCard";
+import Logo from "./assets/devflix.png";
 import Lupa from "./assets/search.svg";
 
 const App = () => {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
 
-  //utilizando chae de API do arquivo .env
-  //const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+  //Utilizando chave de API do arquivo .env
+  // const apiKey = import.meta.env.VITE_OMDB_API_KEY;
   const apiKey = "e4d577fa";
   const apiUrl = `https://omdbapi.com/?apikey=${apiKey}`;
 
-  // alimentando com dados para não ficar nulo
+  //Alimentando com dados para não ficar nulo com useEffect
   useEffect(() => {
     searchMovies("Batman");
   }, []);
@@ -28,13 +28,14 @@ const App = () => {
     setMovies(data.Search);
   };
 
+  //e = evento | ao clicar ou digitar acontece algo
   const handleKeyPress = (e) => {
     e.key === "Enter" && searchMovies(search);
   };
 
   return (
     <div id="app">
-      <img className="logo" src={logo} alt="" />
+      <img className="logo" src={Logo} alt="" />
 
       <div className="search">
         <input
@@ -49,14 +50,17 @@ const App = () => {
       {movies?.length > 0 ? (
         <div className="container">
           {movies.map((movie, index) => (
-            <MovieCard {...movie} apiUrl={apiUrl} key={index} />
+            <MovieCard key={index} apiUrl={apiUrl} {...movie} />
           ))}
         </div>
       ) : (
-        <h2 className="empty">Nenhum filme encontrado😢</h2>
+        <h2 className="empty">😢 Filme não encontrado 😢</h2>
       )}
 
-      <Footer devName={" Limazxzn"} devLink={"https://github.com/limazxz"} />
+      <Footer
+        devName={" ProfCastello"}
+        devLink={"https://github.com/ProfCastello"}
+      />
     </div>
   );
 };

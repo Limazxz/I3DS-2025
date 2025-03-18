@@ -45,7 +45,7 @@
     padding: 16px 24px 24px;
   }
   
-  .movie div:nth-of-type(3) span {
+  .movie div:nth-of-type(3) h2{
     text-transform: uppercase;
     font-size: 13px;
     letter-spacing: 2px;

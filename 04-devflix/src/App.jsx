@@ -58,7 +58,7 @@ const App = () => {
       )}
 
       <Footer
-        devName={"Limazxzn"}
+        devName={" Limazxzn"}
         devLink={"https://github.com/Limazxz"}
       />
     </div>

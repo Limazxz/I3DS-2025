@@ -7,6 +7,7 @@ import Sobre from"./pages/Sobre";
 import Contato from"./pages/Contato";
 import NaoEncontrado from "./pages/NaoEncontrado";
 import Home from "./pages/Home";
+import Footer from "./components/footer/Footer";
 
 function App() {
 
@@ -22,9 +23,7 @@ function App() {
           <Route path="*" element={<NaoEncontrado/>} />
         </Routes>
 
-        <footer className="container d-flex justify-content-center align-items-center">
-          <p>&copy; 2025 - Todos os direitos reservados a <a href="https://github.com/Limazxz">Limazxz</a></p>
-        </footer>
+        <Footer />
       </BrowserRouter>
     </>
   );

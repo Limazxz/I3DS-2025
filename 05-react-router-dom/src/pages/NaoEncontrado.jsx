@@ -2,18 +2,15 @@ import { Link } from "react-router";
 
 const NaoEncontrado = () => {
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
-        <div className="col-md-8 text-center">
-          <h2 className="mb-4">Página Não Encontrada</h2>
-          <p className="lead">
-            Desculpe, a página que você está procurando não existe.
-          </p>
-          <Link to="/" className="btn btn-primary mt-3">
-            Voltar para a Home
-          </Link>
-        </div>
-      </div>
+    <div className="container text-center mt-5">
+      <h1 className="display-1 text-danger">404</h1>
+      <h2 className="mb-4">Página não encontrada</h2>
+      <p className="lead">
+        Desculpe, a página que você está procurando não existe ou foi movida.
+      </p>
+      <Link to="/" className="btn btn-primary mt-3">
+        Voltar para a Página Inicial
+      </Link>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-secondary">
       <div className="container">
         <Link className="navbar-brand" to="/">
           Meu Site

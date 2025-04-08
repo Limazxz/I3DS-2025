@@ -1,14 +1,27 @@
 import React, { useRef } from "react";
+import io from "socket.io-client";
 
 const Join = (props) => {
   //Hooks
   const usernameRef = useRef();
 
-    const handleSubmit = () => {
+  const handleSubmit = async () => {
     const username = usernameRef.current.value;
-    !username.trim() && alert("Por favor, digite um nome de usuário válido.");
-    
+    if (!username.trim() || username.length < 3) {
+      alert("Por favor, digite um nome de usuário válido.");
+
+      return;
     }
+    //Criando a conexão com o socket
+    const servidorSocket = await io.connect("http://192.168.10.123:3001");
+
+    //Enviando o nome de usuário para o servidor
+    servidorSocket.emit("set_username", username);
+
+    //abrindo a pagina de chat
+    props.setSocket(servidorSocket);
+    props.visibility(true);
+  };
 
   return (
     <div className="text-center">

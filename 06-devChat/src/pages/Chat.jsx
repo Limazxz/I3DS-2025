@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Chat = (props) => {
-  //fake massage data
-  const messages = [
-    {
-      authorId: 1,
-      author: "John Doe",
-      message: "olá como vai você?",
-    },
-    {
-      authorId: 2,
-      author: "Jane Doe",
-      message: "Estou bem, e você?",
-    },
-    {
-      authorId: 3,
-      author: "Lucas Doe",
-      message: "Estou bem, e você?",
-    },
-  ];
-  //-----------------------------------
+  const [messageList, setMessageList] = useState([]);
+  const messageRef = useRef();
+  const bottomRef = useRef();
+
+  useEffect(() => {
+    props.socket.on("receive_message", (data) => {
+      setMessageList((current) => [...current, data]);
+    });
+    return () => props.socket.off("receive_message");
+  }, [props.socket]);
+
+  useEffect(() => {
+    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [messageList]);
+
+  const handleSubmit = () => {
+    if (
+      messageList.map((message) => {
+        if (message.username == "undefined") {
+          window.location.reload();
+          return;
+        }
+      })
+    );
+
+    const message = messageRef.current.value;
+    if (!message.trim()) return;
+
+    props.socket.emit("message", message);
+
+    //Enviando a mensagem para o servidor
+    messageRef.current.value = "";
+    messageRef.current.focus();
+  };
 
   return (
     <div
@@ -31,26 +46,37 @@ const Chat = (props) => {
         id="chat-body"
         className="overflow-y-auto flex-grow-1 h-100 d-flex flex-column"
       >
-        {messages.map((message, index) => (
+        {messageList.map((message, index) => (
           <div
-            className="align-self-start bg-light m-3 rounded-3 p-2 text-dark"
+            className={`${
+              message.authorId === props.socket.id
+                ? "align-self-end bg-light m-2 bg-dark"
+                : "align-self-start bg-light m-2 text-dark bg-light"
+            } rounded-3 p-2`}
             key={index}
           >
             <div id="message-author" className="fw-bold">
               {message.author}
             </div>
-            <div id="message-text">{message.message}</div>
+            <div id="message-text">{message.text}</div>
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
-
       <div className="input-group-text border-0 w-100" id="chat-footer">
-        <input id="msgUser" name="msgUser"
+        <input
+          ref={messageRef}
+          autoFocus
           type="text"
           className="form-control bg-light"
           placeholder="Digite sua mensagem..."
+          onKeyDown={(e) => e.key == "Enter" && handleSubmit()}
         />
-        <button className="input-group-text btn btn-light m-0" id="basic-addon1" >
+        <button
+          className="input-group-text btn btn-light m-0"
+          id="basic-addon1"
+          onClick={() => handleSubmit()}
+        >
           <i className="bi bi-send-fill"></i>
         </button>
       </div>

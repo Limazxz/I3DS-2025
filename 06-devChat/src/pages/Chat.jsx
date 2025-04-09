@@ -1,83 +1,77 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const Chat = (props) => {
+const Chat = ({ socket }) => {
+  const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const messageRef = useRef();
   const bottomRef = useRef();
 
   useEffect(() => {
-    props.socket.on("receive_message", (data) => {
-      setMessageList((current) => [...current, data]);
+    const conn = socket.connection;
+
+    conn.on("ReceiveMessage", (msg) => {
+      setMessageList((list) => [...list, msg]);
     });
-    return () => props.socket.off("receive_message");
-  }, [props.socket]);
+
+    conn.on("MessageHistory", (history) => {
+      setMessageList(history);
+    });
+
+    conn.invoke("GetMessages");
+
+    return () => {
+      conn.off("ReceiveMessage");
+      conn.off("MessageHistory");
+    };
+  }, [socket]);
 
   useEffect(() => {
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
 
-  const handleSubmit = () => {
-    if (
-      messageList.map((message) => {
-        if (message.username == "undefined") {
-          window.location.reload();
-          return;
-        }
-      })
-    );
-
-    const message = messageRef.current.value;
-    if (!message.trim()) return;
-
-    props.socket.emit("message", message);
-
-    //Enviando a mensagem para o servidor
-    messageRef.current.value = "";
-    messageRef.current.focus();
+  const sendMessage = async () => {
+    if (message.trim()) {
+      await socket.connection.invoke("SendMessage", socket.username, message);
+      setMessage("");
+    }
   };
 
   return (
-    <div
-      id="chat-container"
-      style={{ width: "400px", height: "600px" }}
-      className="m-4 bg-secondary rounded-4 p-3 d-flex flex-column"
-    >
-      <div
-        id="chat-body"
-        className="overflow-y-auto flex-grow-1 h-100 d-flex flex-column"
-      >
-        {messageList.map((message, index) => (
+    <div className="chat-card d-flex flex-column shadow-lg p-3">
+      <div className="flex-grow-1 overflow-auto mb-2">
+        {messageList.map((msg, idx) => (
           <div
-            className={`${
-              message.authorId === props.socket.id
-                ? "align-self-end bg-light m-2 bg-dark"
-                : "align-self-start bg-light m-2 text-dark bg-light"
-            } rounded-3 p-2`}
-            key={index}
+            key={idx}
+            className={`d-flex flex-column ${
+              msg.author === socket.username
+                ? "align-self-end text-end bg-primary text-light p-2 rounded"
+                : "align-self-start text-start bg-secondary text-light p-2 rounded"
+            }`}
+            style={{ maxWidth: "75%" }}
           >
-            <div id="message-author" className="fw-bold">
-              {message.author}
-            </div>
-            <div id="message-text">{message.text}</div>
+            <strong>{msg.author}</strong>: {msg.text}
           </div>
         ))}
         <div ref={bottomRef} />
       </div>
-      <div className="input-group-text border-0 w-100" id="chat-footer">
+      <div className="input-group">
         <input
-          ref={messageRef}
-          autoFocus
           type="text"
-          className="form-control bg-light"
+          className="container form-control text-light bg-black"
           placeholder="Digite sua mensagem..."
-          onKeyDown={(e) => e.key == "Enter" && handleSubmit()}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button
-          className="input-group-text btn btn-light m-0"
-          id="basic-addon1"
-          onClick={() => handleSubmit()}
-        >
-          <i className="bi bi-send-fill"></i>
+        <button className="btn btn-light" onClick={sendMessage}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            fill="black"
+            className="bi bi-send"
+            viewBox="0 0 16 16"
+          >
+            <path d="M15.964.686a.5.5 0 0 1 .01.848l-14 9a.5.5 0 0 1-.743-.448V8.5l7-1-7-1V5.914a.5.5 0 0 1 .743-.448l14 9a.5.5 0 0 1-.01.848z" />
+          </svg>
         </button>
       </div>
     </div>

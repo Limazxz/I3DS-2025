@@ -1,43 +1,27 @@
 import React, { useRef } from "react";
-import io from "socket.io-client";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 
-const Join = (props) => {
+const Join = ({ setSocket, visibility }) => {
   const usernameRef = useRef();
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const username = usernameRef.current.value.trim();
     if (!username || username.length < 3) {
       alert("Por favor, digite um nome de usuário válido.");
       return;
     }
 
-    // Criando a conexão com o SignalR
-    const connection = new HubConnectionBuilder()
-      .withUrl("http://localhost:3000/chathub")
-      .withAutomaticReconnect()
-      .build();
+    const socket = new WebSocket("http://localhost:54430");
 
-    try {
-      await connection.start();
-      props.setSocket({ connection, username });
-      props.visibility(true);
-    } catch (error) {
-      console.error("Erro ao conectar ao SignalR:", error);
+    socket.onopen = () => {
+      socket.send(username);
+      setSocket(socket);
+      visibility(true);
+    };
+
+    socket.onerror = (err) => {
+      console.error("Erro ao conectar ao WebSocket:", err);
       alert("Não foi possível conectar ao servidor. Tente novamente.");
-    }
-
-    // Criando a conexão com o socket.io
-    const servidorSocket = await io.connect("http://localhost:5000/chathub", {
-      transports: ["websocket"],
-    });
-
-    // Enviando o nome de usuário para o servidor
-    servidorSocket.emit("set_username", username);
-
-    // Abrindo a página de chat
-    props.setSocket(servidorSocket);
-    props.visibility(true);
+    };
   };
 
   return (
@@ -52,10 +36,7 @@ const Join = (props) => {
           placeholder="Nome de usuário"
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         />
-        <button
-          className="btn btn-success w-100"
-          onClick={() => handleSubmit()}
-        >
+        <button className="btn btn-success w-100" onClick={handleSubmit}>
           Entrar
         </button>
       </div>

@@ -6,31 +6,26 @@ const Chat = ({ socket }) => {
   const bottomRef = useRef();
 
   useEffect(() => {
-    const conn = socket.connection;
+    if (!socket) return;
 
-    conn.on("ReceiveMessage", (msg) => {
-      setMessageList((list) => [...list, msg]);
-    });
-
-    conn.on("MessageHistory", (history) => {
-      setMessageList(history);
-    });
-
-    conn.invoke("GetMessages");
+    socket.onmessage = (event) => {
+      const data = event.data;
+      setMessageList((prev) => [...prev, { author: "Servidor", text: data }]);
+    };
 
     return () => {
-      conn.off("ReceiveMessage");
-      conn.off("MessageHistory");
+      socket.close();
     };
   }, [socket]);
 
   useEffect(() => {
-    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (message.trim()) {
-      await socket.connection.invoke("SendMessage", socket.username, message);
+      socket.send(message);
+      setMessageList((prev) => [...prev, { author: "Você", text: message }]);
       setMessage("");
     }
   };
@@ -42,7 +37,7 @@ const Chat = ({ socket }) => {
           <div
             key={idx}
             className={`d-flex flex-column ${
-              msg.author === socket.username
+              msg.author === "Você"
                 ? "align-self-end text-end bg-primary text-light p-2 rounded"
                 : "align-self-start text-start bg-secondary text-light p-2 rounded"
             }`}
